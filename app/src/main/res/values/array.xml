@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="string">
+        <item>张三</item>
+        <item>李四</item>
+    </array>
+    <array name="color">
+        <item>#000</item>
+        <item>#fff</item>
+    </array>
+</resources>

@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">Demo</string>
+    <string name="app_name">演示</string>
+
+    <string name="string_left">左</string>
+    <string name="string_right">右</string>
+    <string name="string_up">上</string>
+    <string name="string_center">中</string>
+    <string name="string_down">下</string>
 </resources>

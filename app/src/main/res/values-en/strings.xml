@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Demo</string>
+
+    <string name="string_left">left</string>
+    <string name="string_right">right</string>
+    <string name="string_up">up</string>
+    <string name="string_center">center</string>
+    <string name="string_down">down</string>
+</resources>
