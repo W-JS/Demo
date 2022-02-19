@@ -79,6 +79,9 @@ public class BaseActivity extends FragmentActivity {
         LogUtil.i("onPopBackStack");
     }
 
+    /**
+     * 直接返回上一页
+     */
     public void onHomeAsUpClick() {
         LogUtil.i("onHomeAsUpClick");
         if (getSupportFragmentManager().popBackStackImmediate()) {
@@ -86,5 +89,9 @@ public class BaseActivity extends FragmentActivity {
         } else {
             finish();
         }
+    }
+
+    public int setPosition(int position) {
+        return position;
     }
 }
