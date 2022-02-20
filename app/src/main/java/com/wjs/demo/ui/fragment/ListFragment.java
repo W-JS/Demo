@@ -31,7 +31,7 @@ public class ListFragment extends BaseFragment implements ListContract.View {
 
     private RecyclerView recyclerView;
     private FruitAdapter adapter;
-    private List<Fruit> fruitList = new ArrayList<>();
+    private static List<Fruit> fruitList = new ArrayList<>();
 
     private ListFragment() {
     }
@@ -40,31 +40,12 @@ public class ListFragment extends BaseFragment implements ListContract.View {
         if (instance == null) {
             instance = new ListFragment();
             presenter = new ListPresenter(ListFragment.getInstance());
+            initFruit();
         }
         return instance;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        LogUtil.i("onCreate");
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        LogUtil.i("onCreateView");
-        View view = inflater.inflate(R.layout.fragment_list, container, false);
-        initView(view);
-        initData();
-        initListener();
-        return view;
-    }
-
-    public void initView(View view) {
-        recyclerView = view.findViewById(R.id.recycler_view);
-    }
-
-    public void initData() {
+    private static void initFruit(){
         for (int i = 0; i < 2; i++) {
             Fruit apple = new Fruit(R.mipmap.apple, "苹果1", "苹果2", "苹果");
             Fruit orange = new Fruit(R.mipmap.orange, "橙子1", "橙子2", "橙子");
@@ -89,7 +70,29 @@ public class ListFragment extends BaseFragment implements ListContract.View {
             fruitList.add(coconut);
         }
         LogUtil.i("数据量 size = " + fruitList.size());
+    }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        LogUtil.i("onCreate");
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        LogUtil.i("onCreateView");
+        View view = inflater.inflate(R.layout.fragment_list, container, false);
+        initView(view);
+        initData();
+        initListener();
+        return view;
+    }
+
+    public void initView(View view) {
+        recyclerView = view.findViewById(R.id.recycler_view);
+    }
+
+    public void initData() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
