@@ -1,5 +1,6 @@
 package com.wjs.demo;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +20,7 @@ import static com.wjs.demo.utils.ConstantUtil.lastSelectedMainPage;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener {
 
+    private Context mContext;
     private FrameLayout content;
     private Button leftBtn, rightBtn;
     private StaticFragment staticFragment;
@@ -29,6 +31,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mContext = this;
         LogUtil.i("onCreate");
         setContentView(R.layout.activity_main);
         initView();
@@ -48,7 +51,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
     public void initView() {
-        staticFragment = StaticFragment.getInstance();
+        staticFragment = StaticFragment.getInstance(mContext);
         listFragment = ListFragment.getInstance();
 
         content = findViewById(R.id.fl_content);

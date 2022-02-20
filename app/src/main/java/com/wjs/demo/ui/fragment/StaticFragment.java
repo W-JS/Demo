@@ -1,8 +1,10 @@
 package com.wjs.demo.ui.fragment;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,16 +16,19 @@ import com.wjs.demo.R;
 import com.wjs.demo.base.BaseFragment;
 import com.wjs.demo.interfaces.StaticContract;
 import com.wjs.demo.presenter.StaticPresenter;
+import com.wjs.demo.ui.dialog.FullScreenPopup;
 import com.wjs.demo.utils.LogUtil;
 
 import java.io.IOException;
 
 public class StaticFragment extends BaseFragment implements StaticContract.View, View.OnClickListener {
 
+    private Context mContext;
 
     private static StaticContract.Presenter presenter;
 
     private static StaticFragment instance = null;
+    private FullScreenPopup popup;
 
     private ImageView showIv;
     private Button upBtn, centerBtn, downBtn;
@@ -33,13 +38,15 @@ public class StaticFragment extends BaseFragment implements StaticContract.View,
 
     private boolean firstClickFlag = false;
 
-    private StaticFragment() {
+    private StaticFragment(Context context) {
+        mContext = context;
     }
 
-    public static StaticFragment getInstance() {
+    public static StaticFragment getInstance(Context context) {
         if (instance == null) {
-            instance = new StaticFragment();
-            presenter = new StaticPresenter(StaticFragment.getInstance());
+            instance = new StaticFragment(context);
+//            presenter = new StaticPresenter(StaticFragment.getInstance(instance.mContext));
+            presenter = new StaticPresenter(instance);
         }
         return instance;
     }
@@ -61,6 +68,8 @@ public class StaticFragment extends BaseFragment implements StaticContract.View,
     }
 
     public void initView(View view) {
+        popup = new FullScreenPopup(mContext);
+
         showIv = view.findViewById(R.id.iv_show);
         upBtn = view.findViewById(R.id.btn_up);
         centerBtn = view.findViewById(R.id.btn_center);
@@ -89,7 +98,6 @@ public class StaticFragment extends BaseFragment implements StaticContract.View,
     public void restoreStaticMode(String staticMode) {
         if (firstClickFlag) {
             lastSelected = strNull;
-            LogUtil.e("restore " + lastSelected);
             setSelectedBtn(staticMode);
         }
     }
@@ -101,7 +109,6 @@ public class StaticFragment extends BaseFragment implements StaticContract.View,
 
     @Override
     public void onClick(View view) {
-        LogUtil.e("onClick " + lastSelected);
         switch (view.getId()) {
             case R.id.btn_up:
                 setSelectedBtn(strUp);
@@ -150,6 +157,7 @@ public class StaticFragment extends BaseFragment implements StaticContract.View,
         }
 
         boolean flag = false;
+        int showImageId = 0;
         int wallpaperId = 0;
         String text = "";
         // 设置当前选中的模式
@@ -159,7 +167,7 @@ public class StaticFragment extends BaseFragment implements StaticContract.View,
                 presenter.setStaticMode(strUp);
                 text = "选中按钮 上";
                 if (!strNull.equals(lastSelected)) {
-                    showIv.setBackgroundResource(R.mipmap.icon01);
+                    showImageId = R.mipmap.icon01;
                     wallpaperId = R.mipmap.wallpaper_1080x2280_01;
                     firstClickFlag = true;
                     flag = true;
@@ -170,7 +178,7 @@ public class StaticFragment extends BaseFragment implements StaticContract.View,
                 presenter.setStaticMode(strCenter);
                 text = "选中按钮 中";
                 if (!strNull.equals(lastSelected)) {
-                    showIv.setBackgroundResource(R.mipmap.icon02);
+                    showImageId = R.mipmap.icon02;
                     wallpaperId = R.mipmap.wallpaper_1080x2280_02;
                     firstClickFlag = true;
                     flag = true;
@@ -181,7 +189,7 @@ public class StaticFragment extends BaseFragment implements StaticContract.View,
                 presenter.setStaticMode(strDown);
                 text = "选中按钮 下";
                 if (!strNull.equals(lastSelected)) {
-                    showIv.setBackgroundResource(R.mipmap.icon03);
+                    showImageId = R.mipmap.icon03;
                     wallpaperId = R.mipmap.wallpaper_1080x2280_03;
                     firstClickFlag = true;
                     flag = true;
@@ -193,14 +201,26 @@ public class StaticFragment extends BaseFragment implements StaticContract.View,
         LogUtil.i(text);
 
         lastSelected = str;
-        if (flag && wallpaperId != 0) {
-            try {
-                Bitmap wallpaper = BitmapFactory.decodeResource(getResources(), wallpaperId);
-                DemoApplication.getContext().setWallpaper(wallpaper);
-                LogUtil.i("壁纸设置成功 wallpaperId = " + wallpaperId);
-            } catch (IOException e) {
-                LogUtil.e("IOException: " + e);
-            }
+        if (flag && wallpaperId != 0 && showImageId != 0) {
+            popup.show();
+
+            Handler handler = new Handler();
+            int finalShowImageId = showImageId;
+            int finalWallpaperId = wallpaperId;
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        showIv.setBackgroundResource(finalShowImageId);
+                        Bitmap wallpaper = BitmapFactory.decodeResource(getResources(), finalWallpaperId);
+                        DemoApplication.getContext().setWallpaper(wallpaper);
+                        LogUtil.i("壁纸设置成功 wallpaperId = " + finalWallpaperId);
+                        popup.dismiss();
+                    } catch (IOException e) {
+                        LogUtil.e("IOException: " + e);
+                    }
+                }
+            }, 1000);
         }
     }
 }

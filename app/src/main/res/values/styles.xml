@@ -10,4 +10,29 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/sp_36</item>
     </style>
+
+    <style name="tvStyle">
+        <item name="android:layout_width">@dimen/tv_width</item>
+        <item name="android:layout_height">@dimen/tv_height</item>
+        <item name="android:background">@drawable/shape_bg_color_tv_normal</item>
+        <item name="android:gravity">center</item>
+        <item name="android:text">@string/string_full_screen_popup</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/sp_16</item>
+    </style>
+
+    <style name="Plane_Dialog">
+        <item name="android:windowFrame">@null</item><!-- 边框 -->
+        <item name="android:background">#00000000</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowAnimationStyle">@style/ActionSheetDialogAnimation</item>
+    </style>
+
+    <!-- ActionSheet进出动画 -->
+    <style name="ActionSheetDialogAnimation" parent="@android:style/Animation.Dialog">
+        <item name="android:windowEnterAnimation">@anim/my_self_dialog_in</item>
+        <item name="android:windowExitAnimation">@anim/my_self_dialog_out</item>
+    </style>
 </resources>

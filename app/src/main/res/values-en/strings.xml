@@ -6,4 +6,6 @@
     <string name="string_up">up</string>
     <string name="string_center">center</string>
     <string name="string_down">down</string>
+
+    <string name="string_full_screen_popup">FullScreenPopup</string>
 </resources>

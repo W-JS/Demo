@@ -6,4 +6,6 @@
     <string name="string_up">上</string>
     <string name="string_center">中</string>
     <string name="string_down">下</string>
+
+    <string name="string_full_screen_popup">全屏弹窗</string>
 </resources>
