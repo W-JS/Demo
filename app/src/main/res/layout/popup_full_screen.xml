@@ -5,8 +5,19 @@
     android:layout_height="match_parent"
     android:background="@color/transparent">
 
+    <ProgressBar
+        android:id="@+id/loading"
+        android:layout_width="@dimen/loading_width"
+        android:layout_height="@dimen/loading_height"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/p_200"
+        android:indeterminateDrawable="@drawable/rotate_loading" />
+
     <TextView
+        android:id="@+id/tv_loading"
         style="@style/tvStyle"
-        android:layout_centerInParent="true" />
+        android:layout_below="@id/loading"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="@dimen/p_100" />
 
 </RelativeLayout>

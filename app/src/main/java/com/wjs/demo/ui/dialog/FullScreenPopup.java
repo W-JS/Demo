@@ -12,6 +12,8 @@ import com.wjs.demo.utils.LogUtil;
 public class FullScreenPopup extends Dialog {
 
     private Context mContext;
+
+    private static FullScreenPopup instance = null;
     private View fullScreenPopupRel;
 
     /**
@@ -19,8 +21,15 @@ public class FullScreenPopup extends Dialog {
      *
      * @param context
      */
-    public FullScreenPopup(Context context) {
+    private FullScreenPopup(Context context) {
         this(context, R.style.Plane_Dialog);
+    }
+
+    public static FullScreenPopup getInstance(Context context) {
+        if (instance == null) {
+            instance = new FullScreenPopup(context);
+        }
+        return instance;
     }
 
     /**
@@ -29,7 +38,7 @@ public class FullScreenPopup extends Dialog {
      * @param context
      * @param themeResId
      */
-    public FullScreenPopup(Context context, int themeResId) {
+    private FullScreenPopup(Context context, int themeResId) {
         super(context, themeResId);
         this.mContext = context;
     }

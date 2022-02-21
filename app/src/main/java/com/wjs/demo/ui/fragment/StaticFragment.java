@@ -1,5 +1,6 @@
 package com.wjs.demo.ui.fragment;
 
+import android.app.WallpaperManager;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -24,6 +25,7 @@ import java.io.IOException;
 public class StaticFragment extends BaseFragment implements StaticContract.View, View.OnClickListener {
 
     private Context mContext;
+    private WallpaperManager wallpaperManager;
 
     private static StaticContract.Presenter presenter;
 
@@ -40,6 +42,7 @@ public class StaticFragment extends BaseFragment implements StaticContract.View,
 
     private StaticFragment(Context context) {
         mContext = context;
+        wallpaperManager = WallpaperManager.getInstance(mContext);
     }
 
     public static StaticFragment getInstance(Context context) {
@@ -68,7 +71,8 @@ public class StaticFragment extends BaseFragment implements StaticContract.View,
     }
 
     public void initView(View view) {
-        popup = new FullScreenPopup(mContext);
+//        popup = new FullScreenPopup(mContext);
+        popup = FullScreenPopup.getInstance(mContext);
 
         showIv = view.findViewById(R.id.iv_show);
         upBtn = view.findViewById(R.id.btn_up);
@@ -207,15 +211,18 @@ public class StaticFragment extends BaseFragment implements StaticContract.View,
             Handler handler = new Handler();
             int finalShowImageId = showImageId;
             int finalWallpaperId = wallpaperId;
+
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     try {
                         showIv.setBackgroundResource(finalShowImageId);
-                        Bitmap wallpaper = BitmapFactory.decodeResource(getResources(), finalWallpaperId);
-                        DemoApplication.getContext().setWallpaper(wallpaper);
-                        LogUtil.i("壁纸设置成功 wallpaperId = " + finalWallpaperId);
-                        popup.dismiss();
+                        if (wallpaperManager != null) {
+                            Bitmap wallpaper = BitmapFactory.decodeResource(getResources(), finalWallpaperId);
+                            wallpaperManager.setBitmap(wallpaper);
+                            LogUtil.i("壁纸设置成功 wallpaperId = " + finalWallpaperId);
+                            popup.dismiss();
+                        }
                     } catch (IOException e) {
                         LogUtil.e("IOException: " + e);
                     }
