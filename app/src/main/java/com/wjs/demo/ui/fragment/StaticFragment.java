@@ -1,18 +1,13 @@
 package com.wjs.demo.ui.fragment;
 
-import android.app.WallpaperManager;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import com.wjs.demo.DemoApplication;
 import com.wjs.demo.R;
 import com.wjs.demo.base.BaseFragment;
 import com.wjs.demo.interfaces.StaticContract;
@@ -20,12 +15,10 @@ import com.wjs.demo.presenter.StaticPresenter;
 import com.wjs.demo.ui.dialog.FullScreenPopup;
 import com.wjs.demo.utils.LogUtil;
 
-import java.io.IOException;
-
 public class StaticFragment extends BaseFragment implements StaticContract.View, View.OnClickListener {
 
     private Context mContext;
-    private WallpaperManager wallpaperManager;
+//    private WallpaperManager wallpaperManager;
 
     private static StaticContract.Presenter presenter;
 
@@ -42,14 +35,13 @@ public class StaticFragment extends BaseFragment implements StaticContract.View,
 
     private StaticFragment(Context context) {
         mContext = context;
-        wallpaperManager = WallpaperManager.getInstance(mContext);
+//        wallpaperManager = WallpaperManager.getInstance(mContext);
     }
 
     public static StaticFragment getInstance(Context context) {
         if (instance == null) {
             instance = new StaticFragment(context);
-//            presenter = new StaticPresenter(StaticFragment.getInstance(instance.mContext));
-            presenter = new StaticPresenter(instance);
+            presenter = new StaticPresenter(instance.mContext, instance);
         }
         return instance;
     }
@@ -103,6 +95,11 @@ public class StaticFragment extends BaseFragment implements StaticContract.View,
             lastSelected = strNull;
             setSelectedBtn(staticMode);
         }
+    }
+
+    @Override
+    public void hidePopup() {
+        popup.dismiss();
     }
 
     @Override
@@ -209,26 +206,9 @@ public class StaticFragment extends BaseFragment implements StaticContract.View,
             popup.setTvDesc(getResources().getString(R.string.string_applying_wallpapers_please_wait));
             popup.timeOutDismissDialog();
 
-            Handler handler = new Handler();
-            int finalShowImageId = showImageId;
-            int finalWallpaperId = wallpaperId;
+            showIv.setBackgroundResource(showImageId);
 
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        showIv.setBackgroundResource(finalShowImageId);
-                        if (wallpaperManager != null) {
-                            Bitmap wallpaper = BitmapFactory.decodeResource(getResources(), finalWallpaperId);
-                            wallpaperManager.setBitmap(wallpaper);
-                            LogUtil.i("壁纸设置成功 wallpaperId = " + finalWallpaperId);
-                        }
-                        popup.dismiss();
-                    } catch (IOException e) {
-                        LogUtil.e("IOException: " + e);
-                    }
-                }
-            }, 1_000);
+            presenter.setWallpaper(wallpaperId);
         }
     }
 }

@@ -12,6 +12,8 @@ public interface StaticContract {
          * @param staticMode 模式
          */
         void setStaticMode(String staticMode);
+
+        void setWallpaper(int wallpaperId);
     }
 
     interface View extends BaseView<Presenter> {
@@ -21,5 +23,7 @@ public interface StaticContract {
          * @param staticMode 模式
          */
         void restoreStaticMode(String staticMode);
+
+        void hidePopup();
     }
 }
