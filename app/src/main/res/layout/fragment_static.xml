@@ -5,19 +5,10 @@
     android:layout_height="match_parent"
     tools:context=".ui.fragment.StaticFragment">
 
-    <ImageView
-        android:id="@+id/iv_show"
-        android:layout_width="@dimen/p_200"
-        android:layout_height="@dimen/p_200"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/p_50"
-        android:background="@drawable/ic_launcher_background" />
-
     <LinearLayout
         android:id="@+id/ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/iv_show"
         android:layout_marginTop="@dimen/p_100"
         android:orientation="vertical">
 

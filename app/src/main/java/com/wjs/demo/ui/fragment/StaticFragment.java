@@ -18,14 +18,12 @@ import com.wjs.demo.utils.LogUtil;
 public class StaticFragment extends BaseFragment implements StaticContract.View, View.OnClickListener {
 
     private Context mContext;
-//    private WallpaperManager wallpaperManager;
 
     private static StaticContract.Presenter presenter;
 
     private static StaticFragment instance = null;
     private FullScreenPopup popup;
 
-    private ImageView showIv;
     private Button upBtn, centerBtn, downBtn;
 
     private final String strUp = "up", strCenter = "center", strDown = "down", strNull = "null";
@@ -35,7 +33,6 @@ public class StaticFragment extends BaseFragment implements StaticContract.View,
 
     private StaticFragment(Context context) {
         mContext = context;
-//        wallpaperManager = WallpaperManager.getInstance(mContext);
     }
 
     public static StaticFragment getInstance(Context context) {
@@ -65,7 +62,6 @@ public class StaticFragment extends BaseFragment implements StaticContract.View,
     public void initView(View view) {
         popup = FullScreenPopup.getInstance(mContext);
 
-        showIv = view.findViewById(R.id.iv_show);
         upBtn = view.findViewById(R.id.btn_up);
         centerBtn = view.findViewById(R.id.btn_center);
         downBtn = view.findViewById(R.id.btn_down);
@@ -205,8 +201,6 @@ public class StaticFragment extends BaseFragment implements StaticContract.View,
             popup.show();
             popup.setTvDesc(getResources().getString(R.string.string_applying_wallpapers_please_wait));
             popup.timeOutDismissDialog();
-
-            showIv.setBackgroundResource(showImageId);
 
             presenter.setWallpaper(wallpaperId);
         }
