@@ -71,7 +71,6 @@ public class StaticFragment extends BaseFragment implements StaticContract.View,
     }
 
     public void initView(View view) {
-//        popup = new FullScreenPopup(mContext);
         popup = FullScreenPopup.getInstance(mContext);
 
         showIv = view.findViewById(R.id.iv_show);
@@ -207,6 +206,8 @@ public class StaticFragment extends BaseFragment implements StaticContract.View,
         lastSelected = str;
         if (flag && wallpaperId != 0 && showImageId != 0) {
             popup.show();
+            popup.setTvDesc(getResources().getString(R.string.string_applying_wallpapers_please_wait));
+            popup.timeOutDismissDialog();
 
             Handler handler = new Handler();
             int finalShowImageId = showImageId;
@@ -221,13 +222,13 @@ public class StaticFragment extends BaseFragment implements StaticContract.View,
                             Bitmap wallpaper = BitmapFactory.decodeResource(getResources(), finalWallpaperId);
                             wallpaperManager.setBitmap(wallpaper);
                             LogUtil.i("壁纸设置成功 wallpaperId = " + finalWallpaperId);
-                            popup.dismiss();
                         }
+                        popup.dismiss();
                     } catch (IOException e) {
                         LogUtil.e("IOException: " + e);
                     }
                 }
-            }, 1000);
+            }, 1_000);
         }
     }
 }

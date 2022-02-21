@@ -8,4 +8,5 @@
     <string name="string_down">down</string>
 
     <string name="string_full_screen_popup">FullScreenPopup</string>
+    <string name="string_applying_wallpapers_please_wait">Applying wallpapers, please wait</string>
 </resources>

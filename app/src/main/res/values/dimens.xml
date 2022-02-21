@@ -4,8 +4,8 @@
     <dimen name="btn_height">62dp</dimen>
     <dimen name="tv_width">100dp</dimen>
     <dimen name="tv_height">30dp</dimen>
-    <dimen name="loading_width">128dp</dimen>
-    <dimen name="loading_height">128dp</dimen>
+    <dimen name="loading_width">256dp</dimen>
+    <dimen name="loading_height">256dp</dimen>
     <dimen name="item_height">100dp</dimen>
 
     <dimen name="p_0">0dp</dimen>

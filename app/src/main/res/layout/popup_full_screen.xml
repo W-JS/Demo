@@ -3,7 +3,7 @@
     android:id="@+id/rel_full_screen_popup"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/transparent">
+    android:background="@drawable/shape_bg_color_loading_dialog">
 
     <ProgressBar
         android:id="@+id/loading"
@@ -13,11 +13,15 @@
         android:layout_marginTop="@dimen/p_200"
         android:indeterminateDrawable="@drawable/rotate_loading" />
 
-    <TextView
+    <com.wjs.demo.ui.view.CallingTextView
         android:id="@+id/tv_loading"
-        style="@style/tvStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@id/loading"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="@dimen/p_100" />
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/p_100"
+        android:text="@string/string_applying_wallpapers_please_wait"
+        android:textColor="@color/black"
+        android:textSize="@dimen/sp_36" />
 
 </RelativeLayout>

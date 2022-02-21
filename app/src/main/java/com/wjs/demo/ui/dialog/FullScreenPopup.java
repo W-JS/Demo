@@ -2,16 +2,22 @@ package com.wjs.demo.ui.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.wjs.demo.R;
+import com.wjs.demo.ui.view.CallingTextView;
 import com.wjs.demo.utils.LogUtil;
 
 public class FullScreenPopup extends Dialog {
 
     private Context mContext;
+
+    private CallingTextView tvDesc;
 
     private static FullScreenPopup instance = null;
     private View fullScreenPopupRel;
@@ -51,12 +57,29 @@ public class FullScreenPopup extends Dialog {
 
     public void init() {
         setContentView(R.layout.popup_full_screen);
+
         fullScreenPopupRel = findViewById(R.id.rel_full_screen_popup);
+        tvDesc = findViewById(R.id.tv_loading);
+
         fullScreenPopupRel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 LogUtil.i("点击 Dialog 隐藏 全屏弹窗");
                 dismiss();
+            }
+        });
+
+        setOnShowListener(new OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                goPointAnim();
+            }
+        });
+
+        setOnDismissListener(new OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                offPointAnim();
             }
         });
 
@@ -68,14 +91,52 @@ public class FullScreenPopup extends Dialog {
 
     @Override
     public void show() {
-        super.show();
-        LogUtil.i("显示 全屏弹窗");
+        if (!isShowing()) {
+            super.show();
+            LogUtil.i("显示 全屏弹窗");
+        }
     }
 
     @Override
     public void dismiss() {
-        super.dismiss();
-        LogUtil.i("隐藏 全屏弹窗");
+        if (isShowing()) {
+            super.dismiss();
+            LogUtil.i("隐藏 全屏弹窗");
+        }
+    }
+
+    private void goPointAnim() {
+        if (tvDesc != null) {
+            LogUtil.i("正在应用壁纸 Dialog 3个点加载动效 开始");
+            tvDesc.start();
+        }
+    }
+
+    private void offPointAnim() {
+        if (tvDesc != null) {
+            LogUtil.i("正在应用壁纸 Dialog 3个点加载动效 结束");
+            tvDesc.stop();
+        }
+    }
+
+    public void setTvDesc(String desc) {
+        tvDesc.setText(desc);
+    }
+
+    /**
+     * 延时 10 秒，10秒内未成功设置壁纸，则设置壁纸失败
+     */
+    public void timeOutDismissDialog() {
+        final long time = 10_000;
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (isShowing()) {
+                    LogUtil.e("耗时 " + (time / 1000) + " s，未成功设置壁纸");
+                    dismiss();
+                }
+            }
+        }, time);
     }
 }
 
