@@ -5,15 +5,18 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.wjs.demo.base.BaseActivity;
-import com.wjs.demo.ui.fragment.StaticFragment;
+import com.wjs.demo.data.DemoRepository;
+import com.wjs.demo.presenter.ListPresenter;
+import com.wjs.demo.presenter.StaticPresenter;
+import com.wjs.demo.schedulers.SchedulerProvider;
 import com.wjs.demo.ui.fragment.ListFragment;
+import com.wjs.demo.ui.fragment.StaticFragment;
 import com.wjs.demo.utils.LogUtil;
 
 import static com.wjs.demo.utils.ConstantUtil.lastSelectedMainPage;
@@ -32,7 +35,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mContext = this;
-        LogUtil.i("onCreate");
         setContentView(R.layout.activity_main);
         initView();
         initListener();
@@ -42,7 +44,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onResume() {
         super.onResume();
-        LogUtil.i("onResume");
         if (!"".equals(lastSelectedMainPage)) {
             setSelectedBtn(false, lastSelectedMainPage);
         } else {
@@ -52,7 +53,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     public void initView() {
         staticFragment = StaticFragment.getInstance(mContext);
-        listFragment = ListFragment.getInstance();
+        listFragment = ListFragment.getInstance(mContext);
+
+        new StaticPresenter(mContext, StaticFragment.getInstance(mContext), DemoRepository.getInstance(mContext), SchedulerProvider.getInstance());
+        new ListPresenter(mContext, ListFragment.getInstance(mContext), DemoRepository.getInstance(mContext), SchedulerProvider.getInstance());
 
         content = findViewById(R.id.fl_content);
         leftBtn = findViewById(R.id.btn_left);
@@ -113,12 +117,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             case strLeft:
                 leftBtn.setSelected(true);
                 replaceFragment(staticFragment);
-                text = "点击按钮 左";
+                text = "选中按钮 左";
                 break;
             case strRight:
                 rightBtn.setSelected(true);
                 replaceFragment(listFragment);
-                text = "点击按钮 右";
+                text = "选中按钮 右";
                 break;
             default:
                 return;

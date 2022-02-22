@@ -1,5 +1,6 @@
 package com.wjs.demo.ui.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,7 +15,6 @@ import com.wjs.demo.adapter.FruitAdapter;
 import com.wjs.demo.base.BaseFragment;
 import com.wjs.demo.entity.Fruit;
 import com.wjs.demo.interfaces.ListContract;
-import com.wjs.demo.presenter.ListPresenter;
 import com.wjs.demo.ui.activity.ShowFruitMessageActivity;
 import com.wjs.demo.utils.LogUtil;
 
@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListFragment extends BaseFragment implements ListContract.View {
+
+    private Context mContext;
 
     private static ListContract.Presenter presenter;
 
@@ -33,19 +35,19 @@ public class ListFragment extends BaseFragment implements ListContract.View {
     private FruitAdapter adapter;
     private static List<Fruit> fruitList = new ArrayList<>();
 
-    private ListFragment() {
+    private ListFragment(Context context) {
+        mContext = context;
     }
 
-    public static ListFragment getInstance() {
+    public static ListFragment getInstance(Context context) {
         if (instance == null) {
-            instance = new ListFragment();
-            presenter = new ListPresenter(ListFragment.getInstance());
+            instance = new ListFragment(context);
             initFruit();
         }
         return instance;
     }
 
-    private static void initFruit(){
+    private static void initFruit() {
         for (int i = 0; i < 2; i++) {
             Fruit apple = new Fruit(R.mipmap.apple, "苹果1", "苹果2", "苹果");
             Fruit orange = new Fruit(R.mipmap.orange, "橙子1", "橙子2", "橙子");
@@ -75,12 +77,10 @@ public class ListFragment extends BaseFragment implements ListContract.View {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LogUtil.i("onCreate");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        LogUtil.i("onCreateView");
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         initView(view);
         initData();
@@ -117,7 +117,14 @@ public class ListFragment extends BaseFragment implements ListContract.View {
         if (presenter != null) {
             presenter.subscribe();
         }
-        LogUtil.i("onResume");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (presenter != null) {
+            presenter.destroy();
+        }
     }
 
     @Override

@@ -6,12 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 
 import com.wjs.demo.R;
 import com.wjs.demo.base.BaseFragment;
 import com.wjs.demo.interfaces.StaticContract;
-import com.wjs.demo.presenter.StaticPresenter;
 import com.wjs.demo.ui.dialog.FullScreenPopup;
 import com.wjs.demo.utils.LogUtil;
 
@@ -38,7 +36,6 @@ public class StaticFragment extends BaseFragment implements StaticContract.View,
     public static StaticFragment getInstance(Context context) {
         if (instance == null) {
             instance = new StaticFragment(context);
-            presenter = new StaticPresenter(instance.mContext, instance);
         }
         return instance;
     }
@@ -46,12 +43,10 @@ public class StaticFragment extends BaseFragment implements StaticContract.View,
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        LogUtil.i("onCreate");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        LogUtil.i("onCreateView");
         View view = inflater.inflate(R.layout.fragment_static, container, false);
         initView(view);
         initListener();
@@ -82,7 +77,14 @@ public class StaticFragment extends BaseFragment implements StaticContract.View,
         if (presenter != null) {
             presenter.subscribe();
         }
-        LogUtil.i("onResume");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (presenter != null) {
+            presenter.destroy();
+        }
     }
 
     @Override
