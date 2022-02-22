@@ -12,7 +12,8 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
-
+        //版本名后面添加一句话，意思就是flavor dimension 它的维度就是该版本号，这样维度就是都是统一的了
+        flavorDimensions "versionCode"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -22,10 +23,39 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    productFlavors {
+        // app1
+        WallpaperTheme {
+            // 设置applicationId（这里很重要，两个不同applicationId的apk，同时安装在同一台Android手机中）
+            applicationId "com.wjs.demo"
+            // 定义app_icon字段，在AndroidManifest.xml文件中用到
+            manifestPlaceholders = [app_icon: "@mipmap/ic_launcher"]
+        }
+        // app2
+        WallpaperThemeTest {
+            applicationId "com.xp.demo"
+            manifestPlaceholders = [app_icon: "@mipmap/ic_launcher"]
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    android.applicationVariants.all {
+        variant ->
+            variant.outputs.all {
+                // 这里修改apk文件名
+                outputFileName = "${productFlavors[0].name}_v${defaultConfig.versionName}_${buildType.name}.apk"
+//                outputFileName = "${productFlavors[0].name}_v${defaultConfig.versionName}_${buildType.name}_${releaseTime()}.apk" // 带日期
+            }
+    }
+}
+
+static def releaseTime() {
+    return new Date().format("yyyyMMddHHmmss", TimeZone.getTimeZone("GMT+08:00"))
 }
 
 dependencies {
