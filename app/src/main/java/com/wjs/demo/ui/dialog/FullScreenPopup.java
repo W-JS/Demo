@@ -22,6 +22,9 @@ public class FullScreenPopup extends Dialog {
     private static FullScreenPopup instance = null;
     private View fullScreenPopupRel;
 
+    private Handler handler = new Handler(Looper.getMainLooper());
+    private final long time = 10_000;// 设置壁纸默认时长，超过则设置失败
+
     /**
      * 样式引用
      *
@@ -48,6 +51,16 @@ public class FullScreenPopup extends Dialog {
         super(context, themeResId);
         this.mContext = context;
     }
+
+    private Runnable runnable = new Runnable() {
+        @Override
+        public void run() {
+            if (isShowing()) {
+                LogUtil.e("耗时 " + (time / 1000) + " s，未成功设置壁纸");
+                dismiss();
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,8 +113,11 @@ public class FullScreenPopup extends Dialog {
     @Override
     public void dismiss() {
         if (isShowing()) {
-            super.dismiss();
-            LogUtil.i("隐藏 全屏弹窗");
+            if (runnable != null && handler != null) {
+                super.dismiss();
+                LogUtil.i("隐藏 全屏弹窗");
+                handler.removeCallbacks(runnable);
+            }
         }
     }
 
@@ -127,16 +143,9 @@ public class FullScreenPopup extends Dialog {
      * 延时 10 秒，10秒内未成功设置壁纸，则设置壁纸失败
      */
     public void timeOutDismissDialog() {
-        final long time = 10_000;
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (isShowing()) {
-                    LogUtil.e("耗时 " + (time / 1000) + " s，未成功设置壁纸");
-                    dismiss();
-                }
-            }
-        }, time);
+        if (runnable != null && handler != null) {
+            handler.postDelayed(runnable, time);
+        }
     }
 }
 
