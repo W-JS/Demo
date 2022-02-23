@@ -3,7 +3,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.wjs.demo">
 
-    <!-- 设置壁纸权限 -->
+    <!-- 设置 读取外部存储 权限 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- 设置 写入外部存储 权限 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- 设置 网络 权限 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 设置 访问网络状态 权限 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 设置 访问 WIFI 状态 权限 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- 设置 挂载卸载文件系统 权限 -->
+    <uses-permission
+        android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
+        tools:ignore="ProtectedPermissions" />
+    <!-- 设置 壁纸 权限 -->
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
 
     <application
