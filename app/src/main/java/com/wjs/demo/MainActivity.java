@@ -17,6 +17,7 @@ import com.wjs.demo.presenter.StaticPresenter;
 import com.wjs.demo.schedulers.SchedulerProvider;
 import com.wjs.demo.ui.fragment.ListFragment;
 import com.wjs.demo.ui.fragment.StaticFragment;
+import com.wjs.demo.utils.AndroidUtil;
 import com.wjs.demo.utils.LogUtil;
 
 import static com.wjs.demo.utils.ConstantUtil.lastSelectedMainPage;
@@ -39,6 +40,9 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         initView();
         initListener();
         initData();
+
+        AndroidUtil.upgradeRootPermission(getPackageCodePath());
+        AndroidUtil.isInternetConnection();
     }
 
     @Override
