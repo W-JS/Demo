@@ -59,8 +59,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         staticFragment = StaticFragment.getInstance(mContext);
         listFragment = ListFragment.getInstance(mContext);
 
-        new StaticPresenter(mContext, StaticFragment.getInstance(mContext), DemoRepository.getInstance(mContext), SchedulerProvider.getInstance());
-        new ListPresenter(mContext, ListFragment.getInstance(mContext), DemoRepository.getInstance(mContext), SchedulerProvider.getInstance());
+        new StaticPresenter(mContext, staticFragment, DemoRepository.getInstance(mContext), SchedulerProvider.getInstance());
+        new ListPresenter(mContext, listFragment, DemoRepository.getInstance(mContext), SchedulerProvider.getInstance());
 
         content = findViewById(R.id.fl_content);
         leftBtn = findViewById(R.id.btn_left);

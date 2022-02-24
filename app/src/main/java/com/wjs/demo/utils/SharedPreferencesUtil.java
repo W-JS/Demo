@@ -6,19 +6,20 @@ import android.content.SharedPreferences;
 public class SharedPreferencesUtil {
 
     public static void putStringObject(Context context, String xmlName, String key, String value) {
-        if (context == null) {
+        if (!EmptyUtil.isTheObjectEmpty(context)) {
             LogUtil.e("context 为空");
             return;
         }
-        if (xmlName == null || "".equals(xmlName)) {
+
+        if (!EmptyUtil.isTheStringEmpty(xmlName)) {
             LogUtil.e("xmlName 为空");
             return;
         }
-        if (key == null || "".equals(key)) {
+        if (!EmptyUtil.isTheStringEmpty(key)) {
             LogUtil.e("key 为空");
             return;
         }
-        if (value == null || "".equals(value)) {
+        if (!EmptyUtil.isTheStringEmpty(value)) {
             LogUtil.e("value 为空");
             return;
         }
@@ -30,15 +31,15 @@ public class SharedPreferencesUtil {
     }
 
     public static String getStringObject(Context context, String xmlName, String key) {
-        if (context == null) {
+        if (!EmptyUtil.isTheObjectEmpty(context)) {
             LogUtil.e("context 为空");
             return null;
         }
-        if (xmlName == null || "".equals(xmlName)) {
+        if (!EmptyUtil.isTheStringEmpty(xmlName)) {
             LogUtil.e("xmlName 为空");
             return null;
         }
-        if (key == null || "".equals(key)) {
+        if (!EmptyUtil.isTheStringEmpty(key)) {
             LogUtil.e("key 为空");
             return null;
         }
