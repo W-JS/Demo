@@ -7,10 +7,16 @@ import android.graphics.BitmapFactory;
 
 import androidx.annotation.NonNull;
 
+import com.liulishuo.filedownloader.BaseDownloadTask;
+import com.liulishuo.filedownloader.FileDownloadListener;
+import com.liulishuo.filedownloader.FileDownloader;
 import com.wjs.demo.data.DemoRepository;
 import com.wjs.demo.interfaces.StaticContract;
 import com.wjs.demo.schedulers.BaseSchedulerProvider;
+import com.wjs.demo.utils.AndroidUtil;
+import com.wjs.demo.utils.Config;
 import com.wjs.demo.utils.LogUtil;
+import com.wjs.demo.utils.RandomUtil;
 
 import java.io.IOException;
 import java.util.concurrent.Callable;
@@ -35,6 +41,40 @@ public class StaticPresenter implements StaticContract.Presenter {
     private WallpaperManager wallpaperManager;
     private String staticMode = "";
 
+    FileDownloadListener wallpaperFileDownloadListener = new FileDownloadListener() {
+        @Override
+        protected void pending(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+
+        }
+
+        @Override
+        protected void progress(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+            LogUtil.i("DownloadListener", "" + soFarBytes);
+        }
+
+        @Override
+        protected void completed(BaseDownloadTask task) {
+            LogUtil.i("DownloadListener", "task.getTag(): " + task.getTag());
+            LogUtil.i("DownloadListener", "task.getTag(1): " + task.getTag(1));
+            LogUtil.i("DownloadListener", "task.getPath(): " + task.getPath());
+        }
+
+        @Override
+        protected void paused(BaseDownloadTask task, int soFarBytes, int totalBytes) {
+
+        }
+
+        @Override
+        protected void error(BaseDownloadTask task, Throwable e) {
+            LogUtil.e("DownloadListener", "Throwable: " + e);
+        }
+
+        @Override
+        protected void warn(BaseDownloadTask task) {
+
+        }
+    };
+
     public StaticPresenter(Context context, @NonNull StaticContract.View mStaticView, DemoRepository mDemoRepository, BaseSchedulerProvider mBaseSchedulerProvider) {
         mContext = context;
         this.mStaticView = mStaticView;
@@ -54,10 +94,34 @@ public class StaticPresenter implements StaticContract.Presenter {
 
     @Override
     public void setWallpaper(int wallpaperId) {
+        String url = "";
+        String id = String.valueOf(wallpaperId);
+        id = id.substring(id.length() - 1, id.length());
+        switch (id) {
+            case "0":
+                url = "https://wallpapercave.com/wp/wp4258424.jpg";
+                break;
+            case "8":
+                url = "https://images.hdqwalls.com/download/nebula-abstract-rs-1080x2280.jpg";
+                break;
+            case "9":
+                url = "https://images.wallpapersden.com/image/download/nebula-4k_a2xoaWyUmZqaraWkpJRmZW1lrWdnbWU.jpg";
+                break;
+        }
+        LogUtil.d(url);
+
+        String finalUrl = url;
         Disposable disposable = Flowable.fromCallable(new Callable<Boolean>() {
 
             @Override
             public Boolean call() throws Exception {
+                FileDownloader.getImpl().create(finalUrl)
+                        .setTag("tag")
+                        .setTag(1, "ket tag")
+                        .setPath(Config.RootPath + Config.WallpaperPath + RandomUtil.getRandomStringByUUID() + AndroidUtil.getImageExtension(finalUrl, "."))
+                        .setListener(wallpaperFileDownloadListener)
+                        .start();
+
                 boolean flag = false;
                 try {
                     if (wallpaperManager != null) {
