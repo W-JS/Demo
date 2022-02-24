@@ -26,18 +26,6 @@ public class CurrentProvider extends ContentProvider {
 
     DBHelper dbHelper;
 
-    private static CurrentProvider instance = null;
-
-    private CurrentProvider() {
-    }
-
-    public static CurrentProvider getInstance() {
-        if (instance == null) {
-            instance = new CurrentProvider();
-        }
-        return instance;
-    }
-
     @Override
     public boolean onCreate() {
         dbHelper = new DBHelper(getContext());
