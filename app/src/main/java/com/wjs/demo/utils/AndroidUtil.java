@@ -74,4 +74,15 @@ public class AndroidUtil {
         return upgradeRootPermission;
     }
 
+    /**
+     * 获取图片扩展名
+     *
+     * @param imageUrl           图片网络地址路径
+     * @param specifiedCharacter 扩展名前的点
+     * @return 图片扩展名
+     */
+    public static String getImageExtension(String imageUrl, String specifiedCharacter) {
+        return specifiedCharacter + StringUtil.truncateAllCharactersAfterTheLastCharacter(imageUrl, specifiedCharacter);
+    }
+
 }
