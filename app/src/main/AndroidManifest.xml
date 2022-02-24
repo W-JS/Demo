@@ -32,11 +32,6 @@
         <activity android:name=".ui.activity.ShowFruitMessageActivity"></activity>
         <activity android:name=".base.BaseActivity" />
 
-        <service
-            android:name=".DemoService"
-            android:enabled="true"
-            android:exported="true" />
-
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -44,6 +39,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name=".DemoService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <provider
+            android:name=".provider.CurrentProvider"
+            android:authorities="com.wjs.demo.provider"
+            android:enabled="true"
+            android:exported="true" />
     </application>
 
 </manifest>
