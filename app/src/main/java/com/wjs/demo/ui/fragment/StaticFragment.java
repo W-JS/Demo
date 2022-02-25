@@ -162,9 +162,9 @@ public class StaticFragment extends BaseFragment implements StaticContract.View,
         switch (str) {
             case strUp:
                 upBtn.setSelected(true);
-                presenter.setStaticMode(strUp);
                 text = "选中按钮 上";
                 if (!strNull.equals(lastSelected)) {
+                    presenter.setStaticMode(strUp);
                     showImageId = R.mipmap.icon01;
                     wallpaperId = R.mipmap.wallpaper_1080x2280_01;
                     firstClickFlag = true;
@@ -173,9 +173,9 @@ public class StaticFragment extends BaseFragment implements StaticContract.View,
                 break;
             case strCenter:
                 centerBtn.setSelected(true);
-                presenter.setStaticMode(strCenter);
                 text = "选中按钮 中";
                 if (!strNull.equals(lastSelected)) {
+                    presenter.setStaticMode(strCenter);
                     showImageId = R.mipmap.icon02;
                     wallpaperId = R.mipmap.wallpaper_1080x2280_02;
                     firstClickFlag = true;
@@ -184,9 +184,9 @@ public class StaticFragment extends BaseFragment implements StaticContract.View,
                 break;
             case strDown:
                 downBtn.setSelected(true);
-                presenter.setStaticMode(strDown);
                 text = "选中按钮 下";
                 if (!strNull.equals(lastSelected)) {
+                    presenter.setStaticMode(strDown);
                     showImageId = R.mipmap.icon03;
                     wallpaperId = R.mipmap.wallpaper_1080x2280_03;
                     firstClickFlag = true;
