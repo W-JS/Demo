@@ -15,9 +15,11 @@ import com.wjs.demo.interfaces.StaticContract;
 import com.wjs.demo.schedulers.BaseSchedulerProvider;
 import com.wjs.demo.utils.AndroidUtil;
 import com.wjs.demo.utils.Config;
+import com.wjs.demo.utils.FileUtil;
 import com.wjs.demo.utils.LogUtil;
 import com.wjs.demo.utils.RandomUtil;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.Callable;
 
@@ -94,6 +96,10 @@ public class StaticPresenter implements StaticContract.Presenter {
 
     @Override
     public void setWallpaper(int wallpaperId) {
+
+        String path = Config.RootPath + Config.WallpaperPath;
+        LogUtil.e(path + " 路径下文件夹大小为: " + FileUtil.byteToKBorMBorGB(FileUtil.getFolderSize(new File(path))));
+
         String url = "";
         String id = String.valueOf(wallpaperId);
         id = id.substring(id.length() - 1, id.length());
@@ -115,12 +121,12 @@ public class StaticPresenter implements StaticContract.Presenter {
 
             @Override
             public Boolean call() throws Exception {
-                FileDownloader.getImpl().create(finalUrl)
+                /*FileDownloader.getImpl().create(finalUrl)
                         .setTag("tag")
                         .setTag(1, "ket tag")
                         .setPath(Config.RootPath + Config.WallpaperPath + RandomUtil.getRandomStringByUUID() + AndroidUtil.getImageExtension(finalUrl, "."))
                         .setListener(wallpaperFileDownloadListener)
-                        .start();
+                        .start();*/
 
                 boolean flag = false;
                 try {
