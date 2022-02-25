@@ -9,15 +9,13 @@ import androidx.annotation.NonNull;
 
 import com.liulishuo.filedownloader.BaseDownloadTask;
 import com.liulishuo.filedownloader.FileDownloadListener;
-import com.liulishuo.filedownloader.FileDownloader;
 import com.wjs.demo.data.DemoRepository;
 import com.wjs.demo.interfaces.StaticContract;
 import com.wjs.demo.schedulers.BaseSchedulerProvider;
-import com.wjs.demo.utils.AndroidUtil;
 import com.wjs.demo.utils.Config;
+import com.wjs.demo.utils.DateUtil;
 import com.wjs.demo.utils.FileUtil;
 import com.wjs.demo.utils.LogUtil;
-import com.wjs.demo.utils.RandomUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,6 +25,7 @@ import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.functions.Consumer;
+import io.reactivex.rxjava3.functions.Function;
 
 public class StaticPresenter implements StaticContract.Presenter {
 
@@ -96,6 +95,7 @@ public class StaticPresenter implements StaticContract.Presenter {
 
     @Override
     public void setWallpaper(int wallpaperId) {
+        DateUtil.getCurrentTimeFullDateFormat();
 
         String path = Config.RootPath + Config.WallpaperPath;
         LogUtil.e(path + " 路径下文件夹大小为: " + FileUtil.byteToKBorMBorGB(FileUtil.getFolderSize(new File(path))));
@@ -132,6 +132,7 @@ public class StaticPresenter implements StaticContract.Presenter {
                 try {
                     if (wallpaperManager != null) {
                         Bitmap wallpaper = BitmapFactory.decodeResource(mContext.getResources(), wallpaperId);
+                        LogUtil.i("开始设置壁纸");
                         wallpaperManager.setBitmap(wallpaper);
                         flag = true;
                     }
@@ -144,16 +145,31 @@ public class StaticPresenter implements StaticContract.Presenter {
             }
         })
                 .subscribeOn(mBaseSchedulerProvider.io())
+                .observeOn(mBaseSchedulerProvider.io())
+                .map(new Function<Boolean, Boolean>() {
+                    @Override
+                    public Boolean apply(Boolean flag) throws Throwable {
+                        if (flag) {
+                            LogUtil.i("壁纸设置成功 wallpaperId = " + wallpaperId);
+                            LogUtil.i("将壁纸信息保存到数据库中");
+                            mDemoRepository.updateCurrent(Config.WallpaperSetting, String.valueOf(wallpaperId), Config.RootPath + Config.WallpaperPath);
+                        } else {
+                            LogUtil.e("壁纸设置失败 wallpaperId = " + wallpaperId);
+                        }
+                        mStaticView.hidePopup();
+                        return flag;
+                    }
+                })
+                .subscribeOn(mBaseSchedulerProvider.io())
                 .observeOn(mBaseSchedulerProvider.ui())
                 .subscribe(new Consumer<Boolean>() {
                     @Override
                     public void accept(Boolean aBoolean) throws Throwable {
                         if (aBoolean) {
-                            LogUtil.i("壁纸设置成功 wallpaperId = " + wallpaperId);
-                        } else {
-                            LogUtil.e("壁纸设置失败 wallpaperId = " + wallpaperId);
+                            LogUtil.i("获取数据库保存的壁纸信息");
+                            mDemoRepository.getCurrent();
+                            mDemoRepository.getCurrentWallpaper();
                         }
-                        mStaticView.hidePopup();
                     }
                 }, new Consumer<Throwable>() {
                     @Override
