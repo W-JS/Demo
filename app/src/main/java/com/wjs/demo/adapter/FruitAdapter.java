@@ -93,7 +93,7 @@ public class FruitAdapter extends RecyclerView.Adapter<FruitAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        LogUtil.i("加载 第 " + position + " 个数据");
+//        LogUtil.i("加载 第 " + position + " 个数据");
         Fruit fruit = mFruitList.get(position);
         holder.fruitImage.setImageResource(fruit.getFruitImageId());
         holder.fruitName1.setText(fruit.getFruitName1());
@@ -105,7 +105,7 @@ public class FruitAdapter extends RecyclerView.Adapter<FruitAdapter.ViewHolder> 
             LogUtil.i("选中 第 " + position + " 个数据");
         } else {
             holder.fruitBtn.setSelected(false);
-            LogUtil.i("取消选中 第 " + position + " 个数据");
+//            LogUtil.i("取消选中 第 " + position + " 个数据");
         }
 
         mViewHolderList.put(position, holder);

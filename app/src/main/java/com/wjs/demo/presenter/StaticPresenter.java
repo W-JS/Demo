@@ -117,6 +117,17 @@ public class StaticPresenter implements StaticContract.Presenter {
         LogUtil.d(url);
 
         String finalUrl = url;
+
+
+        /**
+         * 默认情况下，Observable及其所有链式操作都在当前线程下工作；
+         * subscribeOn可以指定Observable开始操作的线程，如果之后没有切换线程，后续所有操作及结果都在该线程下运行和获取；
+         * subscribeOn调用的位置任意，多次调用仅第一次有效；
+         * observeOn可以切换线程，改变后续链式操作所在的线程，可以多次调用，每次调用都切换一次线程。
+         * ————————————————
+         * 版权声明：本文为CSDN博主「梦想拒绝零风险」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。
+         * 原文链接：https://blog.csdn.net/KevinsCSDN/article/details/79064769
+         */
         Disposable disposable = Flowable.fromCallable(new Callable<Boolean>() {
 
             @Override

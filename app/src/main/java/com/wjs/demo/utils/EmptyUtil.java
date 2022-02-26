@@ -29,4 +29,18 @@ public class EmptyUtil {
             return false;
         }
     }
+
+    /**
+     * 判断字符串长度是否为零
+     *
+     * @param string 需要判断的字符串
+     * @return true-不为零，false-为零
+     */
+    public static boolean isTheStringZeroLength(String string) {
+        if (isTheStringEmpty(string) && string.length() != 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

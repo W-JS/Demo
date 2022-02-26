@@ -82,7 +82,7 @@ public class AndroidUtil {
      * @return 图片扩展名
      */
     public static String getImageExtension(String imageUrl, String specifiedCharacter) {
-        return specifiedCharacter + StringUtil.truncateAllCharactersAfterTheLastCharacter(imageUrl, specifiedCharacter);
+        return specifiedCharacter + StringUtil.truncateAllCharactersAfterTheLastCharacter(true, imageUrl, specifiedCharacter);
     }
 
 }
