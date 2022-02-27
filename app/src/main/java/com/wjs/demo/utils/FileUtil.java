@@ -80,6 +80,10 @@ public class FileUtil {
      */
     public static boolean createFile(String path) {
         boolean flag = false;
+        if (!createFolder(path)) {
+            return flag;
+        }
+
         File file = getTheFileExist(path);
         if (file == null) {
             try {
