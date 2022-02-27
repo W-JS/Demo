@@ -199,6 +199,90 @@ public class FileUtil {
     }
 
     /**
+     * 验证文件复制情况
+     *
+     * @param oldPath
+     * @param newPath
+     * @param describe
+     * @return
+     */
+    public static boolean verifyCopyFolder(String oldPath, String newPath, String describe) {
+        if (isTheFileExist(oldPath)) {
+            boolean status = copyFolder(oldPath, newPath);
+            LogUtil.i(describe + "复制情况: " + status + " oldPath: " + oldPath + " newPath: " + newPath);
+            return status;
+        } else {
+            LogUtil.i(describe + "不存在 " + " oldPath: " + oldPath);
+            return false;
+        }
+    }
+
+    /**
+     * 复制文件夹及其中的文件
+     *
+     * @param oldPath
+     * @param newPath
+     * @return
+     */
+    public static boolean copyFolder(String oldPath, String newPath) {
+        try {
+            if (new File(newPath).exists()) {
+                LogUtil.i("已存在 newPath: " + newPath);
+                deleteFile(newPath);
+            }
+
+            if (!createFolder(newPath)) {
+                LogUtil.e("复制失败，新文件夹创建失败");
+                return false;
+            }
+
+            File oldFile = new File(oldPath);
+            String[] files = oldFile.list();
+            File temp;
+            for (String file : files) {
+                if (oldPath.endsWith(separator)) {
+                    temp = new File(oldPath + file);
+                } else {
+                    temp = new File(oldFile + separator + file);
+                }
+
+                // 如果是子文件夹
+                if (temp.isDirectory()) {
+                    copyFolder(oldPath + "/" + file, newPath + "/" + file);
+                } else if (!temp.exists()) {
+                    LogUtil.e("copyFolder: oldFile不存在 oldPath: " + oldPath);
+                    return false;
+                } else if (!temp.isFile()) {
+                    LogUtil.e("copyFolder: oldFile不是文件 oldPath: " + oldPath);
+                    return false;
+                } else if (!temp.canRead()) {
+                    LogUtil.e("copyFolder: oldFile无法读取文件 oldPath: " + oldPath);
+                    return false;
+                } else {
+                    // 如果是文件
+                    FileInputStream fileInputStream = new FileInputStream(temp);
+                    FileOutputStream fileOutputStream = new FileOutputStream(newPath + "/" + temp.getName());
+                    byte[] buffer = new byte[1024];
+                    int byteRead = 0;
+                    // 循环从输入流读取buffer字节
+                    while ((byteRead = fileInputStream.read(buffer)) != -1) {
+                        // 将读取的输入流写入到输出流
+                        fileOutputStream.write(buffer, 0, byteRead);
+                    }
+                    fileOutputStream.flush();
+                    fileInputStream.close();
+                    fileOutputStream.close();
+                }
+            }
+            LogUtil.i("copyFolder oldPath: " + oldPath + " to newPath: " + newPath);
+            return true;
+        } catch (IOException e) {
+            LogUtil.e("IOException: " + e);
+            return false;
+        }
+    }
+
+    /**
      * 判断文件是否存在
      *
      * @param path 文件路径

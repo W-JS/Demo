@@ -59,4 +59,19 @@ public class FileTest {
 
         FileUtil.verifyCopyFile(oldPath, newPath, "壁纸图片");
     }
+
+    /**
+     * 复制文件夹及其中的文件
+     */
+    public static void copyFolderTest() {
+        String oldPath = "", newPath = "";
+
+        oldPath = "/mnt/sdcard/Download/wallpaper"; // success 该文件夹必须已存在，否则没有文件夹可以复制
+        newPath = "/mnt/sdcard/Download/background/wallpaper"; // success
+
+//        oldPath = "/mnt/sdcard/Download/wallpaper/"; // success 该文件夹必须已存在，否则没有文件夹可以复制
+//        newPath = "/mnt/sdcard/Download/background/wallpaper/"; // success
+
+        FileUtil.verifyCopyFolder(oldPath, newPath, "壁纸合集");
+    }
 }
