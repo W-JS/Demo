@@ -49,4 +49,14 @@ public class FileTest {
 
         FileUtil.deleteFile(path);
     }
+
+    /**
+     * 复制文件
+     */
+    public static void copyFileTest() {
+        String oldPath = "/mnt/sdcard/Download/Test/T.e.s.t/createFolderTest/createFolderTest.txt"; // 该文件必须已存在，否则没有文件可以复制
+        String newPath = "/mnt/sdcard/Download/Test/test/createFolderTest.txt"; // success
+
+        FileUtil.verifyCopyFile(oldPath, newPath, "壁纸图片");
+    }
 }

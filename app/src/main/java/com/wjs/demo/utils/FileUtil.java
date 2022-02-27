@@ -1,6 +1,8 @@
 package com.wjs.demo.utils;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class FileUtil {
@@ -135,6 +137,65 @@ public class FileUtil {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 验证文件复制情况
+     *
+     * @param oldPath
+     * @param newPath
+     * @param describe
+     * @return
+     */
+    public static boolean verifyCopyFile(String oldPath, String newPath, String describe) {
+        if (isTheFileExist(oldPath)) {
+            boolean status = copyFile(oldPath, newPath);
+            LogUtil.i(describe + "复制情况: " + status + " oldPath: " + oldPath + " newPath: " + newPath);
+            return status;
+        } else {
+            LogUtil.i(describe + "不存在 " + " oldPath: " + oldPath);
+            return false;
+        }
+    }
+
+    /**
+     * 复制文件
+     *
+     * @param oldPath
+     * @param newPath
+     * @return
+     */
+    public static boolean copyFile(String oldPath, String newPath) {
+        try {
+            if (new File(newPath).exists()) {
+                LogUtil.i("已存在 newPath: " + newPath);
+                deleteFile(newPath);
+            }
+
+            if (!createFolder(newPath)) {
+                LogUtil.e("复制失败，新文件所在文件夹创建失败");
+                return false;
+            }
+
+            // 如果是文件
+            FileInputStream is = new FileInputStream(oldPath);
+            FileOutputStream fos = new FileOutputStream(new File(newPath));
+            byte[] buffer = new byte[1024];
+            int byteCount = 0;
+            // 循环从输入流读取buffer字节
+            while ((byteCount = is.read(buffer)) != -1) {
+                // 将读取的输入流写入到输出流
+                fos.write(buffer, 0, byteCount);
+            }
+            fos.flush();
+            is.close();
+            fos.close();
+            LogUtil.i("成功复制文件 oldPath: " + oldPath + " to newPath: " + newPath);
+            return true;
+        } catch (IOException e) {
+            LogUtil.e("IOException: " + e);
+            return false;
+        }
     }
 
     /**
