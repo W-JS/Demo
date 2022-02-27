@@ -11,13 +11,13 @@ public class FileTest {
     public static void createFolderTest() {
         String path = "";
 
-        path = "/mnt/sdcard/Download/Test/T.e.s.t/createFolderTest/createFolderTest.txt"; // ok
-//        path = "/mnt/sdcard/Download/Test/T.e.s.t/createFolderTest/"; // ok
-//        path = "/mnt/sdcard/Download/Test/T.e.s.t/createFolderTest"; // ok
+        path = "/mnt/sdcard/Download/Test/T.e.s.t/createFolderTest/createFolderTest.txt"; // success
+//        path = "/mnt/sdcard/Download/Test/T.e.s.t/createFolderTest/"; // success
+//        path = "/mnt/sdcard/Download/Test/T.e.s.t/createFolderTest"; // success
 
-//        path = "mnt/sdcard/Download/Test/T.e.s.t/createFolderTest/createFolderTest.txt"; // ok
-//        path = "mnt/sdcard/Download/Test/T.e.s.t/createFolderTest/"; // ok
-//        path = "mnt/sdcard/Download/Test/T.e.s.t/createFolderTest"; // ok
+//        path = "mnt/sdcard/Download/Test/T.e.s.t/createFolderTest/createFolderTest.txt"; // success
+//        path = "mnt/sdcard/Download/Test/T.e.s.t/createFolderTest/"; // success
+//        path = "mnt/sdcard/Download/Test/T.e.s.t/createFolderTest"; // success
 
         FileUtil.createFolder(path);
     }
@@ -33,5 +33,20 @@ public class FileTest {
 //        path = "mnt/sdcard/Download/Test/T.e.s.t/createFolderTest/createFolderTest.txt"; // success
 
         FileUtil.createFile(path);
+    }
+
+    /**
+     * 删除文件夹及其中文件
+     */
+    public static void deleteFileTest() {
+        String path = "";
+
+        path = "/mnt/sdcard/Download/Test/T.e.s.t/createFolderTest/createFolderTest.txt"; // success
+
+//        path = "mnt/sdcard/Download/Test/"; // success
+
+//        path = "mnt/sdcard/Download/Test"; // success
+
+        FileUtil.deleteFile(path);
     }
 }

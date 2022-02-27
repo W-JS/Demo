@@ -13,7 +13,6 @@ public class FileUtil {
      * @param path 文件夹路径
      * @return true-创建文件夹成功，false-创建文件夹失败
      */
-    // ok
     public static boolean createFolder(String path) {
         boolean createFolderFlag = false;
         try {
@@ -106,30 +105,33 @@ public class FileUtil {
      * @return true-删除成功，false-删除失败
      */
     public static boolean deleteFile(String path) {
+
+        // 判断最后一个字符是否为"/"
+        if (!path.endsWith(separator)) {
+            path = path + separator;
+        }
+
         File file = getTheFileExist(path);
         if (file == null) {
             return false;
         }
 
         if (file.isFile()) {
-            file.delete();
-            LogUtil.w("成功删除文件 path: " + path);
+            LogUtil.d("文件删除情况: " + file.delete() + " path: " + path);
             return true;
         }
 
         if (file.isDirectory()) {
             File[] childFiles = file.listFiles();
             if (childFiles == null || childFiles.length == 0) {
-                file.delete();
-                LogUtil.w("成功删除文件夹且文件夹为空 path: " + path);
+                LogUtil.d("文件夹为空 文件夹删除情况: " + file.delete() + " path: " + path);
                 return true;
             }
 
             for (int i = 0; i < childFiles.length; i++) {
                 deleteFile(path + childFiles[i].getName());
             }
-            file.delete();
-            LogUtil.w("成功删除文件夹 path: " + path);
+            LogUtil.d("文件夹删除情况: " + file.delete() + " path: " + path);
             return true;
         }
         return false;
