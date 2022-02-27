@@ -12,6 +12,7 @@ import com.liulishuo.filedownloader.FileDownloadListener;
 import com.wjs.demo.data.DemoRepository;
 import com.wjs.demo.interfaces.StaticContract;
 import com.wjs.demo.schedulers.BaseSchedulerProvider;
+import com.wjs.demo.test.FileTest;
 import com.wjs.demo.utils.Config;
 import com.wjs.demo.utils.DateUtil;
 import com.wjs.demo.utils.FileUtil;
@@ -95,6 +96,9 @@ public class StaticPresenter implements StaticContract.Presenter {
 
     @Override
     public void setWallpaper(int wallpaperId) {
+
+        FileTest.createFolderTest();
+
         DateUtil.getCurrentTimeFullDateFormat();
 
         String path = Config.RootPath + Config.WallpaperPath;
