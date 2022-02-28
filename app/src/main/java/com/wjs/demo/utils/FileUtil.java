@@ -421,7 +421,6 @@ public class FileUtil {
      * @param path 文件路径
      * @return true-文件存在，false-文件不存在
      */
-    // ok
     public static boolean isTheFileExist(String path) {
         if (!EmptyUtil.isTheStringEmpty(path)) {
             LogUtil.e("文件路径 path: " + path + " 为空");
@@ -488,31 +487,6 @@ public class FileUtil {
     }
 
     /**
-     * 将字节数转化为MB
-     *
-     * @param size 文件夹或者文件的字节大小
-     * @return MB
-     */
-    public static String byteToKBorMBorGB(long size) {
-        long kb = 1024;
-        long mb = kb * 1024;
-        long gb = mb * 1024;
-        String fileSize = "";
-        if (size >= gb) {
-            fileSize = String.format("%.4f GB", (float) size / gb);
-        } else if (size >= mb) {
-            float f = (float) size / mb;
-            fileSize = String.format("%.4f MB", f);
-        } else if (size > kb) {
-            float f = (float) size / kb;
-            fileSize = String.format("%.4f KB", f);
-        } else {
-            fileSize = String.format("%d B", size);
-        }
-        return fileSize;
-    }
-
-    /**
      * 获取文件夹大小
      *
      * @param path 文件夹路径
@@ -550,6 +524,30 @@ public class FileUtil {
         return size;
     }
 
+    /**
+     * 将字节数转化为MB
+     *
+     * @param size 文件夹或者文件的字节大小
+     * @return MB
+     */
+    public static String byteToKBorMBorGB(long size) {
+        long kb = 1024;
+        long mb = kb * 1024;
+        long gb = mb * 1024;
+        String fileSize = "";
+        if (size >= gb) {
+            fileSize = String.format("%.4f GB", (float) size / gb);
+        } else if (size >= mb) {
+            float f = (float) size / mb;
+            fileSize = String.format("%.4f MB", f);
+        } else if (size > kb) {
+            float f = (float) size / kb;
+            fileSize = String.format("%.4f KB", f);
+        } else {
+            fileSize = String.format("%d B", size);
+        }
+        return fileSize;
+    }
 
     /**
      * 是否为常见文件
