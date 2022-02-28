@@ -74,4 +74,17 @@ public class FileTest {
 
         FileUtil.verifyCopyFolder(oldPath, newPath, "壁纸合集");
     }
+
+    /**
+     * zip压缩包解压
+     */
+    public static void unZipTest() {
+        String zipPath = "", unZipPath = "";
+
+        zipPath = "/mnt/sdcard/Download/wallpaper/wallpaper.zip"; // success 该文件夹必须已存在，否则没有文件夹可以复制
+        unZipPath = "/mnt/sdcard/Download/background/"; // success
+//        unZipPath = "/mnt/sdcard/Download/background"; // success
+
+        FileUtil.unZip(zipPath, unZipPath);
+    }
 }

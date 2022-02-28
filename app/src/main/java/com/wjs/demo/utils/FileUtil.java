@@ -1,9 +1,15 @@
 package com.wjs.demo.utils;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 public class FileUtil {
 
@@ -279,6 +285,129 @@ public class FileUtil {
         } catch (IOException e) {
             LogUtil.e("IOException: " + e);
             return false;
+        }
+    }
+
+    /**
+     * zip压缩包解压
+     *
+     * @param zipPath   解压缩文件名
+     * @param unZipPath 目标路径
+     * @return 是否解压成功
+     */
+    public static boolean unZip(String zipPath, String unZipPath) {
+        boolean unZipFlag = false;
+        if (!EmptyUtil.isTheStringZeroLength(zipPath)) {
+            LogUtil.e("解压缩文件名为空 zipPath: " + zipPath);
+            return unZipFlag;
+        }
+        if (!EmptyUtil.isTheStringZeroLength(unZipPath)) {
+            LogUtil.e("解压缩文件路径为空 unZipPath: " + unZipPath);
+            return unZipFlag;
+        }
+        if (!isTheFileExist(zipPath)) {
+            LogUtil.e("压缩文件不存在 zipPath: " + zipPath);
+            return unZipFlag;
+        } else {
+            LogUtil.e("压缩文件已存在 zipPath: " + zipPath);
+        }
+        if (new File(unZipPath).exists()) {
+            LogUtil.i("已存在 unZipPath: " + unZipPath);
+            deleteFile(unZipPath);
+        }
+        if (!createFolder(unZipPath)) {
+            LogUtil.e("解压路径创建失败");
+            return unZipFlag;
+        }
+        if (!unZipPath.endsWith("/")) {
+            unZipPath = unZipPath + "/";
+        }
+
+        byte buffer[] = new byte[4096];
+        FileInputStream fileInputStream = null;
+        BufferedInputStream bufferedInputStream = null;
+        ZipInputStream zipInputStream = null;
+        FileOutputStream fileOutputStream = null;
+
+        try {
+            fileInputStream = new FileInputStream(zipPath);
+            bufferedInputStream = new BufferedInputStream(fileInputStream);
+            zipInputStream = new ZipInputStream(bufferedInputStream);
+
+            ZipEntry zipEntry = null;
+            while (true) {
+                if (!((zipEntry = zipInputStream.getNextEntry()) != null)) {
+                    break;
+                }
+                File file = new File(unZipPath + zipEntry.getName());
+                if (zipEntry.isDirectory()) {
+                    file.mkdirs();
+                    LogUtil.i("mkdirs");
+                } else {
+                    // 如果指定文件的文件目录不存在，则创建文件目录
+                    File parent = file.getParentFile();
+                    if (!parent.exists()) {
+                        parent.mkdirs();
+                    }
+                    int readBytes = 0;
+                    fileOutputStream = new FileOutputStream(file);
+
+                    while (true) {
+                        if (!((readBytes = zipInputStream.read(buffer)) > 0)) {
+                            break;
+                        }
+                        fileOutputStream.write(buffer, 0, readBytes);
+                    }
+                    fileOutputStream.close();
+                    fileOutputStream = null;
+                    LogUtil.i("write file");
+                }
+                zipInputStream.closeEntry();
+                unZipFlag = true;
+            }
+//            zipInputStream.close();
+//            bufferedInputStream.close();
+//            fileInputStream.close();
+//            zipInputStream = null;
+//            bufferedInputStream = null;
+//            fileInputStream = null;
+        } catch (FileNotFoundException e) {
+            LogUtil.e("FileNotFoundException: " + e);
+            unZipFlag = false;
+        } catch (IOException e) {
+            LogUtil.e("IOException: " + e);
+            unZipFlag = false;
+        } finally {
+            try {
+                closeOutputStream(fileOutputStream);
+                closeInputStream(zipInputStream);
+                closeInputStream(bufferedInputStream);
+                closeInputStream(fileInputStream);
+            } catch (Exception e) {
+                LogUtil.e("Exception: " + e);
+            }
+            LogUtil.d("压缩包解压情况: " + unZipFlag + " zipPath: " + zipPath + " unZipPath: " + unZipPath);
+            return unZipFlag;
+        }
+    }
+
+    public static void closeInputStream(InputStream inputStream) {
+        if (inputStream != null) {
+            try {
+                inputStream.close();
+            } catch (IOException e) {
+                LogUtil.e("IOException: " + e);
+            }
+        }
+    }
+
+    public static void closeOutputStream(OutputStream outputStream) {
+        if (outputStream != null) {
+            try {
+                outputStream.close();
+            } catch (IOException e) {
+                LogUtil.e("IOException: " + e);
+            }
         }
     }
 
