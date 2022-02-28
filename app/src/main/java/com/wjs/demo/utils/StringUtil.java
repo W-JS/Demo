@@ -47,4 +47,40 @@ public class StringUtil {
         }
         return string;
     }
+
+    /**
+     * 验证字符串为非空字符串
+     *
+     * @param input 需要验证非空的字符串
+     * @return
+     */
+    public static String verifyNonNullString(String input) {
+        char[] originalChars = input.toCharArray();
+        char[] chars = new char[originalChars.length];
+        for (int i = 0; i < originalChars.length; i++) {
+            chars[i] = purifyChar(originalChars[i]);
+        }
+        return new String(chars);
+    }
+
+    /**
+     * 净化字符
+     *
+     * @param inputChar
+     * @return
+     */
+    public static char purifyChar(char inputChar) {
+        return inputChar;
+    }
+
+    /**
+     * 判断某个字符串是否包含指定字符串（字符）
+     *
+     * @param string             需要判断的字符串
+     * @param specifiedCharacter 指定字符串（字符）
+     * @return
+     */
+    public static boolean isContainsStringOrChar(String string, String specifiedCharacter) {
+        return string.contains(specifiedCharacter);
+    }
 }
