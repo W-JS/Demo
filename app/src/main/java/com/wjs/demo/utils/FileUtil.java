@@ -653,4 +653,47 @@ public class FileUtil {
             return false;
         }
     }
+
+    /**
+     * 从assets目录中复制文件夹到指定目录
+     *
+     * @param context
+     * @param assetsFolderName
+     * @param newFolderPath
+     * @return
+     */
+    public static boolean copyAssetsFolder(Context context, String assetsFolderName, String newFolderPath) {
+        try {
+            // 获取assets目录下的所有文件及目录名
+            String[] fileNames = context.getAssets().list(assetsFolderName);
+            if (fileNames.length > 0) {
+                // 如果是目录
+                File file = new File(newFolderPath);
+                file.mkdirs();
+                // 如果文件夹不存在，则递归
+                for (String fileName : fileNames) {
+                    copyAssetsFolder(context, assetsFolderName + separator + fileName, newFolderPath + separator + fileName);
+                }
+            } else {
+                // 如果是文件
+                InputStream is = context.getAssets().open(assetsFolderName);
+                FileOutputStream fos = new FileOutputStream(new File(newFolderPath));
+                byte[] buffer = new byte[1024];
+                int byteCount = 0;
+                // 循环从输入流读取buffer字节
+                while ((byteCount = is.read(buffer)) != -1) {
+                    // 将读取的输入流写入到输出流
+                    fos.write(buffer, 0, byteCount);
+                }
+                fos.flush();
+                is.close();
+                fos.close();
+            }
+            LogUtil.i("copyAssetsFolder oldPath: " + assetsFolderName + " to newPath: " + newFolderPath);
+            return true;
+        } catch (IOException e) {
+            LogUtil.e("IOException: " + e);
+            return false;
+        }
+    }
 }

@@ -122,4 +122,17 @@ public class FileTest {
         LogUtil.i("从assets目录中复制文件到指定目录的复制情况: " + FileUtil.copyAssetsFile(DemoApplication.getContext(), assetsFileName, newFilePath));
 
     }
+
+    /**
+     * 从assets目录中复制文件到指定目录
+     */
+    public static void copyAssetsFolderTest() {
+        String assetsFolderName = "", newFolderPath = "";
+
+        assetsFolderName = "wallpaper";
+        newFolderPath = "/mnt/sdcard/Download/background/wallpaper/"; // success
+
+        LogUtil.i("从assets目录中复制文件夹到指定目录的复制情况: " + FileUtil.copyAssetsFolder(DemoApplication.getContext(), assetsFolderName, newFolderPath + assetsFolderName));
+
+    }
 }
