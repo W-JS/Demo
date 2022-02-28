@@ -95,4 +95,17 @@ public class FileTest {
     public static void getSdCadFeeSizeTest() {
         LogUtil.i("获取SD卡的剩余容量: " + FileUtil.getSdCadFeeSize());
     }
+
+    /**
+     * 获取文件夹大小
+     */
+    public static void getFolderSizeTest() {
+        String path = "";
+
+        path = "/mnt/sdcard/Download/wallpaper/"; // success
+        path = "/mnt/sdcard/Download/wallpaper"; // success
+
+        LogUtil.i("获取文件夹大小: " + FileUtil.getFolderSize(path));
+
+    }
 }

@@ -514,6 +514,21 @@ public class FileUtil {
     /**
      * 获取文件夹大小
      *
+     * @param path 文件夹路径
+     * @return long
+     */
+    public static String getFolderSize(String path) {
+        File file = getTheFileExist(path);
+        if (file != null && file.isDirectory()) {
+            return byteToKBorMBorGB(getFolderSize(file));
+        }
+        LogUtil.e("不是文件夹 path: " + path);
+        return null;
+    }
+
+    /**
+     * 获取文件夹大小
+     *
      * @param file File实例
      * @return long
      */
