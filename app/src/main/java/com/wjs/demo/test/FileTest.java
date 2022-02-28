@@ -1,5 +1,6 @@
 package com.wjs.demo.test;
 
+import com.wjs.demo.DemoApplication;
 import com.wjs.demo.utils.FileUtil;
 import com.wjs.demo.utils.LogUtil;
 
@@ -106,6 +107,19 @@ public class FileTest {
         path = "/mnt/sdcard/Download/wallpaper"; // success
 
         LogUtil.i("获取文件夹大小: " + FileUtil.getFolderSize(path));
+
+    }
+
+    /**
+     * 从assets目录中复制文件到指定目录
+     */
+    public static void copyAssetsFileTest() {
+        String assetsFileName = "", newFilePath = "";
+
+        assetsFileName = "wallpaper.jpg";
+        newFilePath = "/mnt/sdcard/Download/background/wallpaper/wallpaper.jpg"; // success
+
+        LogUtil.i("从assets目录中复制文件到指定目录的复制情况: " + FileUtil.copyAssetsFile(DemoApplication.getContext(), assetsFileName, newFilePath));
 
     }
 }

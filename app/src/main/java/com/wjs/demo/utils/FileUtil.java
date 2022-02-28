@@ -1,5 +1,6 @@
 package com.wjs.demo.utils;
 
+import android.content.Context;
 import android.os.Environment;
 import android.os.StatFs;
 
@@ -613,5 +614,43 @@ public class FileUtil {
         }
 
         return false;
+    }
+
+    /**
+     * 从assets目录中复制文件到指定目录
+     *
+     * @param context
+     * @param assetsFileName
+     * @param newFilePath
+     * @return
+     */
+    public static boolean copyAssetsFile(Context context, String assetsFileName, String newFilePath) {
+        try {
+            if (isTheFileExist(newFilePath)) {
+                LogUtil.i("已存在 newFilePath: " + newFilePath);
+                deleteFile(newFilePath);
+            } else {
+                createFolder(newFilePath);
+            }
+
+            // 如果是文件
+            InputStream is = context.getAssets().open(assetsFileName);
+            FileOutputStream fos = new FileOutputStream(new File(newFilePath));
+            byte[] buffer = new byte[1024];
+            int byteCount = 0;
+            // 循环从输入流读取buffer字节
+            while ((byteCount = is.read(buffer)) != -1) {
+                // 将读取的输入流写入到输出流
+                fos.write(buffer, 0, byteCount);
+            }
+            fos.flush();
+            is.close();
+            fos.close();
+            LogUtil.i("copyAssetsFile oldPath: " + assetsFileName + " to newPath: " + newFilePath);
+            return true;
+        } catch (IOException e) {
+            LogUtil.e("IOException: " + e);
+            return false;
+        }
     }
 }
