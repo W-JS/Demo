@@ -1,6 +1,7 @@
 package com.wjs.demo.test;
 
 import com.wjs.demo.utils.FileUtil;
+import com.wjs.demo.utils.LogUtil;
 
 public class FileTest {
 
@@ -86,5 +87,12 @@ public class FileTest {
 //        unZipPath = "/mnt/sdcard/Download/background"; // success
 
         FileUtil.unZip(zipPath, unZipPath);
+    }
+
+    /**
+     * 获取SD卡的剩余容量
+     */
+    public static void getSdCadFeeSizeTest() {
+        LogUtil.i("获取SD卡的剩余容量: " + FileUtil.getSdCadFeeSize());
     }
 }

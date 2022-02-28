@@ -1,5 +1,8 @@
 package com.wjs.demo.utils;
 
+import android.os.Environment;
+import android.os.StatFs;
+
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -462,6 +465,52 @@ public class FileUtil {
         return null;
     }
 
+
+    /**
+     * 获取SD卡的剩余容量
+     *
+     * @return SD卡的剩余容量
+     */
+    public static String getSdCadFeeSize() {
+        // 获取SD卡的文件路径
+        File path = Environment.getExternalStorageDirectory();
+        StatFs sf = new StatFs(path.getPath());
+
+        // 获取单个数据块的大小(Byte)
+        long blockSize = sf.getBlockSizeLong();
+
+        // 空闲的数据块的数量
+        long freeBlocks = sf.getAvailableBlocksLong();
+
+        // 返回SD卡空闲大小
+        return byteToKBorMBorGB(freeBlocks * blockSize);
+    }
+
+    /**
+     * 将字节数转化为MB
+     *
+     * @param size 文件夹或者文件的字节大小
+     * @return MB
+     */
+    public static String byteToKBorMBorGB(long size) {
+        long kb = 1024;
+        long mb = kb * 1024;
+        long gb = mb * 1024;
+        String fileSize = "";
+        if (size >= gb) {
+            fileSize = String.format("%.4f GB", (float) size / gb);
+        } else if (size >= mb) {
+            float f = (float) size / mb;
+            fileSize = String.format("%.4f MB", f);
+        } else if (size > kb) {
+            float f = (float) size / kb;
+            fileSize = String.format("%.4f KB", f);
+        } else {
+            fileSize = String.format("%d B", size);
+        }
+        return fileSize;
+    }
+
     /**
      * 获取文件夹大小
      *
@@ -485,29 +534,6 @@ public class FileUtil {
         return size;
     }
 
-
-    /**
-     * 将字节数转化为MB
-     *
-     * @param size 文件夹或者文件的字节大小
-     * @return MB
-     */
-    public static String byteToKBorMBorGB(long size) {
-        long kb = 1024;
-        long mb = kb * 1024;
-        long gb = mb * 1024;
-        if (size >= gb) {
-            return String.format("%.1f GB", (float) size / gb);
-        } else if (size >= mb) {
-            float f = (float) size / mb;
-            return String.format(f > 100 ? "%.0f MB" : "%.1f MB", f);
-        } else if (size > kb) {
-            float f = (float) size / kb;
-            return String.format(f > 100 ? "%.0f KB" : "%.1f KB", f);
-        } else {
-            return String.format("%d B", size);
-        }
-    }
 
     /**
      * 是否为常见文件
