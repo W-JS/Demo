@@ -83,6 +83,7 @@ public class FileTest {
     public static void unZipTest() {
         String zipPath = "", unZipPath = "";
 
+        // 注意：zip压缩包里文件命名不能含有中文
         zipPath = "/mnt/sdcard/Download/wallpaper/wallpaper.zip"; // success 该文件夹必须已存在，否则没有文件夹可以复制
         unZipPath = "/mnt/sdcard/Download/background/"; // success
 //        unZipPath = "/mnt/sdcard/Download/background"; // success

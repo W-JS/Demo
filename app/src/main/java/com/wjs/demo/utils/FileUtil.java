@@ -258,7 +258,7 @@ public class FileUtil {
 
                 // 如果是子文件夹
                 if (temp.isDirectory()) {
-                    copyFolder(oldPath + "/" + file, newPath + "/" + file);
+                    copyFolder(oldPath + separator + file, newPath + separator + file);
                 } else if (!temp.exists()) {
                     LogUtil.e("copyFolder: oldFile不存在 oldPath: " + oldPath);
                     return false;
@@ -271,7 +271,7 @@ public class FileUtil {
                 } else {
                     // 如果是文件
                     FileInputStream fileInputStream = new FileInputStream(temp);
-                    FileOutputStream fileOutputStream = new FileOutputStream(newPath + "/" + temp.getName());
+                    FileOutputStream fileOutputStream = new FileOutputStream(newPath + separator + temp.getName());
                     byte[] buffer = new byte[1024];
                     int byteRead = 0;
                     // 循环从输入流读取buffer字节
@@ -323,11 +323,11 @@ public class FileUtil {
             LogUtil.e("解压路径创建失败");
             return unZipFlag;
         }
-        if (!unZipPath.endsWith("/")) {
-            unZipPath = unZipPath + "/";
+        if (!unZipPath.endsWith(separator)) {
+            unZipPath = unZipPath + separator;
         }
 
-        byte buffer[] = new byte[4096];
+        byte[] buffer = new byte[4096];
         FileInputStream fileInputStream = null;
         BufferedInputStream bufferedInputStream = null;
         ZipInputStream zipInputStream = null;
@@ -343,10 +343,11 @@ public class FileUtil {
                 if (!((zipEntry = zipInputStream.getNextEntry()) != null)) {
                     break;
                 }
-                File file = new File(unZipPath + zipEntry.getName());
+                String path = unZipPath + zipEntry.getName();
+                File file = new File(path);
                 if (zipEntry.isDirectory()) {
                     file.mkdirs();
-                    LogUtil.i("mkdirs");
+                    LogUtil.i("createFolder path: " + path);
                 } else {
                     // 如果指定文件的文件目录不存在，则创建文件目录
                     File parent = file.getParentFile();
@@ -364,11 +365,11 @@ public class FileUtil {
                     }
                     fileOutputStream.close();
                     fileOutputStream = null;
-                    LogUtil.i("write file");
+                    LogUtil.i("createFile path: " + path);
                 }
                 zipInputStream.closeEntry();
-                unZipFlag = true;
             }
+            unZipFlag = true;
 //            zipInputStream.close();
 //            bufferedInputStream.close();
 //            fileInputStream.close();
